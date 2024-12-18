@@ -1,0 +1,21 @@
+{
+    "_id":"scrape-next-pagination",
+    "startUrl":[
+        "https://shopee.co.id/agungsalonsupplier_cosmetic?page=4&sortBy=pop&tab=0",
+        "https://shopee.co.id/agungsalonsupplier_cosmetic?page=5&sortBy=pop&tab=0",
+        "https://shopee.co.id/agungsalonsupplier_cosmetic?page=6&sortBy=pop&tab=0",
+        "https://shopee.co.id/agungsalonsupplier_cosmetic?page=7&sortBy=pop&tab=0",
+        "https://shopee.co.id/agungsalonsupplier_cosmetic?page=8&sortBy=pop&tab=0",
+        "https://shopee.co.id/agungsalonsupplier_cosmetic?page=9&sortBy=pop&tab=0",
+        "https://shopee.co.id/agungsalonsupplier_cosmetic?page=10&sortBy=pop&tab=0",
+        "https://shopee.co.id/agungsalonsupplier_cosmetic?page=11&sortBy=pop&tab=0",
+        "https://shopee.co.id/agungsalonsupplier_cosmetic?page=12&sortBy=pop&tab=0",
+        "https://shopee.co.id/agungsalonsupplier_cosmetic?page=13&sortBy=pop&tab=0",
+        "https://shopee.co.id/agungsalonsupplier_cosmetic?page=14&sortBy=pop&tab=0",
+        "https://shopee.co.id/agungsalonsupplier_cosmetic?page=15&sortBy=pop&tab=0"
+    ],
+        "selectors":[{
+            "id":"product","parentSelectors":["_root"],"type":"SelectorElement","selector":".contents","multiple":true},{
+                "id":"product name","parentSelectors":["product"],"type":"SelectorText","selector":".line-clamp-2","multiple":false,"regex":""},{
+                    "id":"harga","parentSelectors":["product"],"type":"SelectorText","selector":".items-baseline","multiple":false,"regex":""},{
+                        "id":"image","parentSelectors":["product"],"type":"SelectorImage","selector":".inset-y-0","multiple":false}]}
