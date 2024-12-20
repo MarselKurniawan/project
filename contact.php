@@ -1,3 +1,33 @@
+<?php
+// Include the database connection file
+include('includes/db.php');
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  // Sanitize and get form data
+  $name = htmlspecialchars(trim($_POST['name']));
+  $email = htmlspecialchars(trim($_POST['email']));
+  $message = htmlspecialchars(trim($_POST['message']));
+
+  // Prepare SQL query to insert data into the contact table
+  $query = "INSERT INTO contact (name, email, message) VALUES (:name, :email, :message)";
+  $stmt = $pdo->prepare($query);
+
+  // Bind parameters to prevent SQL injection
+  $stmt->bindParam(':name', $name);
+  $stmt->bindParam(':email', $email);
+  $stmt->bindParam(':message', $message);
+
+  if ($stmt->execute()) {
+    // If insert is successful, display success message
+    $successMessage = "Your message has been sent. Thank you!";
+  } else {
+    // In case of failure, handle accordingly (optional)
+    $errorMessage = "Something went wrong. Please try again.";
+  }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,6 +58,16 @@
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet" />
+  <style>
+    .supmit {
+      background: var(--accent-color) !important;
+      color: var(--contrast-color) !important;
+      border: 0 !important;
+      padding: 10px 30px !important;
+      transition: 0.4s !important;
+      border-radius: 4px !important;
+    }
+  </style>
 </head>
 
 <body class="index-page">
@@ -41,7 +81,7 @@
       <nav id="navmenu" class="navmenu">
         <ul>
           <li>
-            <a href="home.php" class="active">Home<br /></a>
+            <a href="#hero" class="active">Home<br /></a>
           </li>
           <li><a href="about.html">About</a></li>
           <li><a href="members.php">Member</a></li>
@@ -53,57 +93,87 @@
 
     </div>
   </header>
-  <main class="main pt-4">
-    <?php
-    include('includes/db.php');  // Include the database connection file
-    
-    // Fetch events from the database
-    $stmt = $pdo->query("SELECT * FROM events");
-    $events = $stmt->fetchAll();
-    ?>
 
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="portfolio section">
+  <main class="main p-5">
+    <!-- Contact Section -->
+    <section id="contact" class="contact section">
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Gallery</h2>
-        <p>Kegiatan Kami</p>
+        <h2>Contact</h2>
+        <p>Contact Us</p>
       </div>
       <!-- End Section Title -->
 
-      <div class="container">
-        <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
-          <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
-            <!-- <li data-filter="*" class="filter-active">All</li> -->
-          </ul>
-          <!-- End Portfolio Filters -->
-
-          <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
-            <?php foreach ($events as $event): ?>
-              <div class="col-lg-4 col-md-6 portfolio-item isotope-item">
-                <div class="portfolio-content h-100">
-                  <img src="uploads/<?php echo $event['image']; ?>" class="img-fluid" alt="" />
-                  <div class="portfolio-info">
-                    <h4>
-                      <?php echo $event['title']; ?>
-                    </h4>
-                    <p>
-                      <?php echo $event['description']; ?>
-                    </p>
-                    <a href="uploads/<?php echo $event['image']; ?>" title="<?php echo $event['title']; ?>">
-                    </a>
-                  </div>
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-4">
+          <div class="col-lg-6">
+            <div class="row gy-4">
+              <div class="col-md-6">
+                <div class="info-item" data-aos="fade" data-aos-delay="200">
+                  <i class="bi bi-geo-alt"></i>
+                  <h3>Address</h3>
+                  <p>Bla Bla Bla</p>
+                  <p>Bla Bla, Jawtim 535022</p>
                 </div>
               </div>
-              <!-- End Portfolio Item -->
-            <?php endforeach; ?>
+              <!-- End Info Item -->
+
+              <div class="col-md-6">
+                <div class="info-item" data-aos="fade" data-aos-delay="300">
+                  <i class="bi bi-telephone"></i>
+                  <h3>Call Us</h3>
+                  <p>+62 123 456 789</p>
+                  <p>+62 123 456 789</p>
+                </div>
+              </div>
+              <!-- End Info Item -->
+
+              <div class="col-md-6">
+                <div class="info-item" data-aos="fade" data-aos-delay="400">
+                  <i class="bi bi-envelope"></i>
+                  <h3>Email Us</h3>
+                  <p>info@contoh.com</p>
+                </div>
+              </div>
+              <!-- End Info Item -->
+            </div>
           </div>
-          <!-- End Portfolio Container -->
+
+          <div class="col-lg-6">
+            <form action="contact.php" method="post" class="form" data-aos="fade-up" data-aos-delay="200">
+              <div class="row gy-4">
+                <div class="col-md-6">
+                  <input type="text" name="name" class="form-control" placeholder="Your Name" required="" />
+                </div>
+
+                <div class="col-md-6">
+                  <input type="email" class="form-control" name="email" placeholder="Your Email" required="" />
+                </div>
+
+                <div class="col-12">
+                  <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
+                </div>
+
+                <div class="col-12 text-center">
+                  <div class="error-message"></div>
+                  <!-- Show the success message if available -->
+                  <?php if (isset($successMessage)): ?>
+                    <div class="suksess-message">
+                      <?php echo $successMessage; ?>
+                    </div>
+                  <?php endif; ?>
+
+                  <button type="submit" class="supmit">Send Message</button>
+                </div>
+              </div>
+            </form>
+
+          </div>
+          <!-- End Contact Form -->
         </div>
       </div>
     </section>
-    <!-- /Portfolio Section -->
-
+    <!-- /Contact Section -->
   </main>
 
   <footer id="footer" class="footer">

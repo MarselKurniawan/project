@@ -10,17 +10,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $bio = $_POST['bio'];
 
         // Proses file foto
-        $photo = $_FILES['photo']['name'];
-        $target = "uploads/" . basename($photo);
+        if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+            $photo = $_FILES['photo']['name'];
+            $target = "uploads/" . basename($photo);
 
-        // Validasi upload file
-        if (move_uploaded_file($_FILES['photo']['tmp_name'], $target)) {
-            // Insert member ke dalam database
-            $stmt = $pdo->prepare("INSERT INTO members (name, role, photo, bio) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$name, $role, $photo, $bio]);
-            echo "<div class='alert alert-success'>Member added successfully!</div>";
+            // Validasi upload file (periksa tipe file dan ukuran)
+            $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+            $max_size = 25 * 1024 * 1024; // Maksimal 25 MB
+
+            if (in_array($_FILES['photo']['type'], $allowed_types) && $_FILES['photo']['size'] <= $max_size) {
+                // Pindahkan file yang diupload ke folder target
+                if (move_uploaded_file($_FILES['photo']['tmp_name'], $target)) {
+                    // Insert member ke dalam database
+                    $stmt = $pdo->prepare("INSERT INTO members (name, role, photo, bio) VALUES (?, ?, ?, ?)");
+                    $stmt->execute([$name, $role, $photo, $bio]);
+                    echo "<div class='alert alert-success'>Member added successfully!</div>";
+                } else {
+                    echo "<div class='alert alert-danger'>Failed to upload photo.</div>";
+                }
+            } else {
+                echo "<div class='alert alert-danger'>Invalid file type or file size exceeds the limit.</div>";
+            }
         } else {
-            echo "<div class='alert alert-danger'>Failed to upload photo.</div>";
+            echo "<div class='alert alert-danger'>No photo uploaded or error occurred with the file upload.</div>";
         }
     }
 }
@@ -29,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $stmt = $pdo->query("SELECT * FROM members");
 $members = $stmt->fetchAll();
 ?>
+
 
 <h1 class="h3 mb-4 text-gray-800">Manage Members</h1>
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addMemberModal">Add Member</button>

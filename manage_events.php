@@ -8,13 +8,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $date = $_POST['date'];
         $description = $_POST['description'];
         $image = $_FILES['image']['name'];
-        $target = "uploads/" . basename($image);
+        $imageTmpName = $_FILES['image']['tmp_name'];
+        $imageSize = $_FILES['image']['size'];
+        $imageError = $_FILES['image']['error'];
+        $imageExt = strtolower(pathinfo($image, PATHINFO_EXTENSION));
 
-        // Upload image
-        move_uploaded_file($_FILES['image']['tmp_name'], $target);
+        // Validate image file (allowed types and max size 25MB)
+        if ($imageError === 0) {
+            if ($imageSize <= 25 * 1024 * 1024) { // 25 MB
+                if ($imageExt === 'png' || $imageExt === 'jpg' || $imageExt === 'jpeg') {
+                    $target = "uploads/" . basename($image);
+                    move_uploaded_file($imageTmpName, $target);
 
-        $stmt = $pdo->prepare("INSERT INTO events (title, date, description, image) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$title, $date, $description, $image]);
+                    // Insert event into the database
+                    $stmt = $pdo->prepare("INSERT INTO events (title, date, description, image) VALUES (?, ?, ?, ?)");
+                    $stmt->execute([$title, $date, $description, $image]);
+                } else {
+                    echo "Only PNG, JPG, or JPEG files are allowed.";
+                }
+            } else {
+                echo "File size exceeds the 25MB limit.";
+            }
+        } else {
+            echo "Error uploading the file.";
+        }
     }
 }
 

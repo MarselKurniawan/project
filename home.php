@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Index - FlexStart Bootstrap Template</title>
+
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -37,7 +37,7 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
-      <a href="index.html" class="logo d-flex align-items-center me-auto">
+      <a href="home.php" class="logo d-flex align-items-center me-auto">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <h1 class="sitename">Organisasi Mahasiswa</h1>
       </a>
@@ -46,14 +46,14 @@
         <ul>
           <li><a href="#hero" class="active">Home<br></a></li>
           <li><a href="about.html">About</a></li>
-          <li><a href="members.html">Member</a></li>
-          <li><a href="gallery.html">Gallery</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="members.php">Member</a></li>
+          <li><a href="gallery.php">Gallery</a></li>
+          <li><a href="contact.php">Contact</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="btn-getstarted flex-md-shrink-0" href="index.html#about">Get Started</a>
+      <a class="btn-getstarted flex-md-shrink-0" href="home.php#about">Get Started</a>
 
     </div>
   </header>
@@ -67,7 +67,8 @@
         <div class="row gy-4">
           <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
             <h1 data-aos="fade-up">Organisasi Mahasiswa </h1>
-            <p data-aos="fade-up" class="fs-6" data-aos-delay="100">Kami adalah komunitas yang berdedikasi untuk mendukung
+            <p data-aos="fade-up" class="fs-6" data-aos-delay="100">Kami adalah komunitas yang berdedikasi untuk
+              mendukung
               pengembangan pribadi dan profesional mahasiswa melalui berbagai
               kegiatan dan program. Temukan berita terbaru, acara mendatang, dan potret momen berharga dari kegiatan
               kami.
@@ -89,7 +90,7 @@
 
     <?php
     include('includes/db.php');  // Include the database connection file
-
+    
     // Fetch events from the database
     $stmt = $pdo->query("SELECT * FROM events");
     $events = $stmt->fetchAll();
@@ -113,8 +114,7 @@
 
           <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
             <?php foreach ($events as $event): ?>
-              <div
-                class="col-lg-4 col-md-6 portfolio-item isotope-item">
+              <div class="col-lg-4 col-md-6 portfolio-item isotope-item">
                 <div class="portfolio-content h-100">
                   <img src="uploads/<?php echo $event['image']; ?>" class="img-fluid" alt="" />
                   <div class="portfolio-info">
@@ -124,8 +124,7 @@
                     <p>
                       <?php echo $event['description']; ?>
                     </p>
-                    <a href="uploads/<?php echo $event['image']; ?>"
-                      title="<?php echo $event['title']; ?>">
+                    <a href="uploads/<?php echo $event['image']; ?>" title="<?php echo $event['title']; ?>">
                     </a>
                   </div>
                 </div>
@@ -166,7 +165,7 @@
 
             // Optionally, truncate the content for a preview
             $shortContent = substr($content, 0, 150) . '...';
-          ?>
+            ?>
 
             <div class="col-xl-4 col-md-6">
               <div class="post-item position-relative h-100" data-aos="fade-up" data-aos-delay="100">
@@ -202,7 +201,7 @@
       <div class="container footer-top">
         <div class="row gy-4">
           <div class="col-lg-4 col-md-6 footer-about">
-            <a href="index.html" class="d-flex align-items-center">
+            <a href="home.php" class="d-flex align-items-center">
               <span class="sitename">Organisasi Mahasiswa</span>
             </a>
             <div class="footer-contact pt-3">
